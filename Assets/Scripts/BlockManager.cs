@@ -53,6 +53,7 @@ public class BlockManager : MonoBehaviour
 
     private void Update()
     {
+        // TODO: this has a mix of logic for the webcam and the test patterns, need to cleanup
         SetWebcamBlocks();
 
         if (!isDirty)

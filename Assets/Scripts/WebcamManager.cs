@@ -8,8 +8,8 @@ public class WebcamManager : MonoBehaviour
     private WebCamTexture webCamTexture;
     private Color32[] pixelData;
 
-    private int width = 800; //160;
-    private int height = 600; //90;
+    private int width = 800;
+    private int height = 600;
     private int framerate = 60;
 
     private void Start()
@@ -28,6 +28,9 @@ public class WebcamManager : MonoBehaviour
         webCamTexture.GetPixels32(pixelData);
 
         float sumOfGrayscale = 0.0f;
+
+        // TODO: this math doesn't work out for all combinations of
+        // screen resolution and camera resolution...
         int chunkSize = width / resolution;
         int otherSize = width / chunkSize;
 
@@ -36,19 +39,21 @@ public class WebcamManager : MonoBehaviour
 
         for (int i = 0; i < width * height; i += chunkSize)
         {
-            if (i > 0 && i%width==0)
+            if (i > 0 && i % width == 0)
             {
                 i += width * chunkSize;
             }
 
-            for (int y=0; y<chunkSize; y++)
+            for (int y = 0; y < chunkSize; y++)
             {
-                for (int x=0; x<chunkSize; x++)
+                for (int x = 0; x < chunkSize; x++)
                 {
                     int currentPixel = i + x + y * width;
 
                     if (currentPixel > 0 && currentPixel < width * height)
                     {
+                        // magic numbers correspond to how bright the human eye sees colors
+                        // when translating to grayscale
                         sumOfGrayscale +=
                             pixelData[currentPixel].r * 0.2126f +
                             pixelData[currentPixel].g * 0.7152f +
@@ -58,9 +63,9 @@ public class WebcamManager : MonoBehaviour
             }
 
             int xIndex = currentIndex % otherSize;
-            int yIndex = Mathf.Max(0,(otherSize - 1) - (currentIndex / otherSize));
+            int yIndex = Mathf.Max(0, (otherSize - 1) - (currentIndex / otherSize));
 
-            newValues[xIndex, yIndex] = sumOfGrayscale / (chunkSize*chunkSize);
+            newValues[xIndex, yIndex] = sumOfGrayscale / (chunkSize * chunkSize);
             currentIndex++;
 
             sumOfGrayscale = 0.0f;
