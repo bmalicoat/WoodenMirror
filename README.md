@@ -1,5 +1,7 @@
 # Wooden Mirror
 
+Video Demo: https://www.youtube.com/watch?v=aa8NKv3R7is
+
 - Install Unity: http://unity3d.com/get-unity/download
 - Launch Unity (create account/sign in)
 - Choose this project
